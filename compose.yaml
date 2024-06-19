@@ -1,0 +1,25 @@
+version: "3"
+services:
+  databasa:
+    container_name: "databasa"
+    image: 'postgres:latest'
+    environment:
+      - 'POSTGRES_DB=postgres'
+      - 'POSTGRES_PASSWORD=1nd3v3l()pm3nT'
+      - 'POSTGRES_USER=postgres'
+    ports:
+      - '5432:5432'
+  frontend:
+    container_name: "plx-site"
+    build:
+      context: ./plx-podlasie-site/
+    ports:
+      - "3000:3000"
+  backend:
+    container_name: "plx-server"
+    build:
+      context: ./plx-podlasie-server/
+    ports:
+      - "8080:8080"
+    depends_on:
+      - databasa

@@ -1,0 +1,17 @@
+services:
+  maindb:
+    image: 'postgres:latest'
+    environment:
+      - 'POSTGRES_DB=postgres'
+      - 'POSTGRES_PASSWORD=1nd3v3l()pm3nT'
+      - 'POSTGRES_USER=postgres'
+    ports:
+      - '32768:5432'
+  testdb:
+    image: 'postgres:latest'
+    environment:
+      - 'POSTGRES_DB=postgres'
+      - 'POSTGRES_PASSWORD=1nd3v3l()pm3nT'
+      - 'POSTGRES_USER=postgres'
+    ports:
+      - '32868:5432'
