@@ -25,19 +25,19 @@ public class ListingController {
         this.listingService = listingService;
     }
 
-
     @GetMapping("/listing")
     public ResponseEntity<?> getApprovedListings() {
         try {
             logger.info("Getting approved listings");
-            return ResponseEntity.ok(listingService.findAll().stream().filter(Listing::isApproved).map(ListingMapper::toDto).toList());
+            return ResponseEntity.ok(
+                    listingService.findAll().stream().filter(Listing::isApproved).map(ListingMapper::toDto).toList());
         } catch (Exception e) {
             logger.error("Unable to get approved listings", e);
             return ExceptionHandler.exceptionHandler(e);
         }
     }
 
-    @GetMapping("/user/listing")
+    @GetMapping("/premium/listing")
     public ResponseEntity<?> getListingsUsersListings() {
         try {
             logger.info("User getting listings");
@@ -70,7 +70,7 @@ public class ListingController {
         }
     }
 
-    @PostMapping("/user/listing")
+    @PostMapping("/premium/listing")
     public ResponseEntity<?> addListing(@RequestBody ListingRequest listingRequest) {
         try {
             logger.info("Adding listing {}", listingRequest);
@@ -82,7 +82,7 @@ public class ListingController {
         }
     }
 
-    @PutMapping("/user/listing")
+    @PutMapping("/premium/listing")
     public ResponseEntity<?> updateListing(@RequestBody ListingDto listingDto) {
         try {
             logger.info("Updating listing {}", listingDto);
@@ -105,7 +105,7 @@ public class ListingController {
         }
     }
 
-    @DeleteMapping("/user/listing/{id}")
+    @DeleteMapping("/premium/listing/{id}")
     public ResponseEntity<?> deleteListing(@PathVariable Long id) {
         try {
             logger.info("Deleting listing with id {}", id);

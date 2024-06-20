@@ -23,19 +23,20 @@ public class SecurityConfig {
         this.userDetailService = userDetailService;
     }
 
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(req ->
-                        req
-                                .requestMatchers("/api/v1/auth/**").permitAll()
-                                .requestMatchers("/api/v1/user/**").hasAnyAuthority(Role.USER.name(), Role.ADMIN.name())
-                                .requestMatchers("/api/v1/admin/**").hasAuthority(Role.ADMIN.name())
-                                .requestMatchers("/test").permitAll()
-                                .anyRequest()
-                                .hasAnyAuthority(Role.ADMIN.name(), Role.USER.name()))
+                .authorizeHttpRequests(req -> req
+                        .requestMatchers("/api/v1/auth/**").permitAll()
+                        .requestMatchers("/api/v1/user/**")
+                        .hasAnyAuthority(Role.USER.name(), Role.USER_PREMIUM.name(), Role.ADMIN.name())
+                        .requestMatchers("/api/v1/premium/**")
+                        .hasAnyAuthority(Role.USER_PREMIUM.name(), Role.ADMIN.name())
+                        .requestMatchers("/api/v1/admin/**").hasAuthority(Role.ADMIN.name())
+                        .requestMatchers("/test").permitAll()
+                        .anyRequest()
+                        .hasAnyAuthority(Role.ADMIN.name(), Role.USER.name(), Role.USER_PREMIUM.name()))
                 .formLogin(AbstractHttpConfigurer::disable)
                 .userDetailsService(userDetailService)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
@@ -48,7 +49,8 @@ public class SecurityConfig {
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)
+            throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
 

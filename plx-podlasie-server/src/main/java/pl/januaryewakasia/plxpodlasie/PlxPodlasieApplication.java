@@ -40,8 +40,8 @@ class TestDataGenerator {
             String rawPassword = "password" + i;
             String encodedPassword = passwordEncoder.encode(rawPassword);
             writer.write(String.format(
-                    "INSERT INTO _user (username, email, password, role, enabled, account_non_expired, credentials_non_expired, account_non_locked) VALUES ('user%d', 'user%d@gmail.com', '%s', 'USER', true, true, true, true);%n",
-                    i, i, encodedPassword));
+                    "INSERT INTO _user (username, email, password, role, enabled, account_non_expired, credentials_non_expired, account_non_locked) VALUES ('user%d', 'user%d@gmail.com', '%s', '%s', true, true, true, true);%n",
+                    i, i, encodedPassword, i == 54 ? Role.USER_PREMIUM.name() : Role.USER.name()));
         }
 
         // Inserting Listings

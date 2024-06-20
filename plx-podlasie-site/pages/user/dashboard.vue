@@ -96,7 +96,7 @@ onMounted(async () => {
     console.error(await categoriesResponse.text())
   }
 
-  const response = await fetch("http://127.0.0.1:8080/api/v1/user/listing", {
+  const response = await fetch("http://127.0.0.1:8080/api/v1/premium/listing", {
     method: 'GET',
     credentials: "include"
   });
@@ -104,9 +104,7 @@ onMounted(async () => {
     const data: Listing[] = await response.json();
     listings.value = data;
   } else if (response.status === 403) {
-    alert("Session expired! Please log in.");
-    useCookie("loggedIn", { sameSite: "lax", secure: true }).value = null;
-    navigateTo("/auth/login");
+    alert("You need to be user premium to manage listings!");
   } else {
     alert("Unable retrieve data! Please try again later!")
   }
@@ -129,7 +127,7 @@ async function addNewListing(newListing: {
   categoryId: number,
   userId: number
 }) {
-  const response = await fetch("http://127.0.0.1:8080/api/v1/user/listing", {
+  const response = await fetch("http://127.0.0.1:8080/api/v1/premium/listing", {
     method: 'POST',
     credentials: "include",
     headers: {
@@ -143,19 +141,17 @@ async function addNewListing(newListing: {
     alert("New listing added successfully!");
     closeAddModal();
   } else if (response.status === 403) {
-    alert("Session expired! Please log in.");
-    useCookie("loggedIn").value = null;
-    navigateTo("/auth/login");
+    alert("You need to be user premium in order to add listing!");
+    closeAddModal();
   } else {
     alert("Unable to add listing! Please try again later.");
-    console.error(await response.text())
     closeAddModal();
   }
 }
 
 async function removeListing(listing: Listing) {
   if (confirm("Are you sure you want to remove listing?")) {
-    const response = await fetch(`http://127.0.0.1:8080/api/v1/user/listing/${listing.id}`, {
+    const response = await fetch(`http://127.0.0.1:8080/api/v1/premium/listing/${listing.id}`, {
       method: "DELETE",
       credentials: "include",
     })
@@ -163,9 +159,7 @@ async function removeListing(listing: Listing) {
       alert("Listing removed successfully!");
       listings.value = listings.value.toSpliced(listings.value.indexOf(listing), 1);
     } else if (response.status === 403) {
-      alert("Session expired! Please log in again!");
-      useCookie("loggedIn").value = null;
-      navigateTo("/auth/login");
+      alert("You need to be user premium in order to remove listing!");
     } else {
       alert("Unable to remove listing! Please try again later.");
       console.error(await response.text());
@@ -174,7 +168,7 @@ async function removeListing(listing: Listing) {
 }
 
 const updateListing = async (updatedListing: Listing) => {
-  const response = await fetch('http://127.0.0.1:8080/api/v1/user/listing', {
+  const response = await fetch('http://127.0.0.1:8080/api/v1/premium/listing', {
     method: 'PUT',
     credentials: "include",
     headers: { 'Content-Type': 'application/json' },

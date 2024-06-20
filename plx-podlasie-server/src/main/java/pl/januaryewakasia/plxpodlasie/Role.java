@@ -2,5 +2,6 @@ package pl.januaryewakasia.plxpodlasie;
 
 public enum Role {
     ADMIN,
-    USER
+    USER,
+    USER_PREMIUM
 }
